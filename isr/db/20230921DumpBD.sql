@@ -1,5 +1,5 @@
 /*
-SQLyog Community v13.2.0 (64 bit)
+SQLyog Community v13.1.7 (64 bit)
 MySQL - 10.4.28-MariaDB : Database - contadb
 *********************************************************************
 */
@@ -15,6 +15,64 @@ MySQL - 10.4.28-MariaDB : Database - contadb
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`contadb` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
 
 USE `contadb`;
+
+/*Table structure for table `catconceptosresultado` */
+
+DROP TABLE IF EXISTS `catconceptosresultado`;
+
+CREATE TABLE `catconceptosresultado` (
+  `idfila` int(11) NOT NULL,
+  `idorden` int(11) NOT NULL,
+  `concepto` varchar(255) DEFAULT NULL,
+  `multiplicador` int(11) NOT NULL DEFAULT 1,
+  `pctggravado` decimal(10,6) NOT NULL DEFAULT 0.000000,
+  `monto` decimal(10,6) NOT NULL,
+  `excento` decimal(10,6) NOT NULL,
+  `gravado` decimal(10,6) DEFAULT NULL,
+  `idestatus` int(11) NOT NULL,
+  `fereg` timestamp NOT NULL DEFAULT current_timestamp(),
+  `femod` datetime DEFAULT NULL,
+  PRIMARY KEY (`idfila`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `catconceptosresultado` */
+
+insert  into `catconceptosresultado`(`idfila`,`idorden`,`concepto`,`multiplicador`,`pctggravado`,`monto`,`excento`,`gravado`,`idestatus`,`fereg`,`femod`) values 
+(1,1,'Salario comodin',1,1.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:13:33',NULL),
+(2,2,'Tiempo Extra comodin',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:13:57',NULL),
+(3,3,'Dia de Descanso Laborado',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:14:08',NULL),
+(4,4,'Prima Dominical',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:14:14',NULL),
+(5,5,'Totales comodin',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:14:22',NULL),
+(6,6,'Limite Inferior ISR',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:14:25',NULL),
+(7,7,'Excedente Limite Inferior ISR',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:15:14',NULL),
+(8,8,'Porcentaje Aplicable Limite Inferior ISR',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:15:26',NULL),
+(9,9,'ISR Marginal',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:15:33',NULL),
+(10,10,'Cuota Fija',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:15:39',NULL),
+(11,11,'Subsidio al Empleo Correspondiente',-1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:16:04',NULL),
+(12,12,'ISR a Retener comodin',1,0.000000,0.000000,0.000000,0.000000,1,'2023-09-23 06:16:22',NULL);
+
+/*Table structure for table `catjornadas` */
+
+DROP TABLE IF EXISTS `catjornadas`;
+
+CREATE TABLE `catjornadas` (
+  `idjornada` int(11) NOT NULL,
+  `jornada` varchar(50) DEFAULT NULL,
+  `maxhorastrabajo` int(11) NOT NULL DEFAULT 8,
+  `maxhorasextras` int(11) NOT NULL DEFAULT 1,
+  `annio` int(11) NOT NULL,
+  `idestatus` int(11) NOT NULL DEFAULT 1,
+  `fereg` timestamp NOT NULL DEFAULT current_timestamp(),
+  `femod` datetime DEFAULT NULL,
+  PRIMARY KEY (`idjornada`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `catjornadas` */
+
+insert  into `catjornadas`(`idjornada`,`jornada`,`maxhorastrabajo`,`maxhorasextras`,`annio`,`idestatus`,`fereg`,`femod`) values 
+(1,'diurna',8,4,2023,1,'2023-09-23 05:38:04',NULL),
+(2,'nocturna',7,3,2023,1,'2023-09-23 05:38:14',NULL),
+(3,'mixta',7,3,2023,1,'2023-09-23 05:38:23',NULL);
 
 /*Table structure for table `catoperadores` */
 
@@ -74,6 +132,9 @@ CREATE TABLE `catperiodos` (
   `idperiodo` int(11) NOT NULL,
   `periodo` varchar(50) NOT NULL,
   `totaldias` int(11) NOT NULL DEFAULT 1,
+  `maxhorasextrasdobles` int(11) DEFAULT NULL,
+  `maxhorasextrastriples` int(11) DEFAULT NULL,
+  `maxhorasextrasdoblesexcentas` int(11) NOT NULL,
   `diasdescanso` int(11) DEFAULT 0,
   `idestatus` int(11) NOT NULL DEFAULT 1,
   PRIMARY KEY (`idperiodo`)
@@ -81,14 +142,14 @@ CREATE TABLE `catperiodos` (
 
 /*Data for the table `catperiodos` */
 
-insert  into `catperiodos`(`idperiodo`,`periodo`,`totaldias`,`diasdescanso`,`idestatus`) values 
-(1,'diario',1,0,1),
-(2,'semanal',7,1,1),
-(3,'quincenal',15,2,1),
-(4,'mensual',30,4,1),
-(5,'decenales',10,1,1),
-(6,'anual',365,52,1),
-(7,'hora',0,0,1);
+insert  into `catperiodos`(`idperiodo`,`periodo`,`totaldias`,`maxhorasextrasdobles`,`maxhorasextrastriples`,`maxhorasextrasdoblesexcentas`,`diasdescanso`,`idestatus`) values 
+(1,'diario',1,1,0,1,0,1),
+(2,'semanal',7,9,0,7,1,1),
+(3,'quincenal',15,18,0,14,2,1),
+(4,'mensual',30,36,0,28,4,1),
+(5,'decenales',10,12,0,10,1,1),
+(6,'anual',365,468,0,175,52,1),
+(7,'hora',0,0,0,0,0,1);
 
 /*Table structure for table `catunidades` */
 

@@ -1,4 +1,4 @@
-<?php 
+<?php
     class Conexion{
 
         public $host = "localhost";

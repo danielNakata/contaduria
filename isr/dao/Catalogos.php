@@ -1,8 +1,10 @@
 <?php
-    include "dto/CatOperadores.php";
-    include "dto/CatParametro.php";
-    include "dto/CatPeriodos.php";
-    include "dto/CatUnidades.php";
+    include "../dto/CatOperadores.php";
+    include "../dto/CatParametro.php";
+    include "../dto/CatPeriodos.php";
+    include "../dto/CatUnidades.php";
+    include "../dto/CatJornadas.php";
+    include "../dto/CatConceptosResultados.php";
 
     class Catalogos{
 
@@ -17,6 +19,62 @@
                         $cat = new CatUnidades();
                         $cat->idunidad = $fila["idunidad"];
                         $cat->unidad = $fila["unidad"];
+                        $cat->idestatus = $fila["idestatus"];
+                        array_push($arr, $cat);
+                    }
+                    //print_r($arr);
+                    $resultado->free();
+                }
+            }catch(Exception $ex){
+                print_r($ex);
+                $arr = $ex->getMessage();
+            }
+            return $arr;
+        }
+
+        public function cargaCatConceptosResultado($conn){
+            $arr = "";
+            try{
+                $resultado = $conn->query("select idfila, idorden, concepto, multiplicador, monto, excento, gravado, idestatus, pctggravado from contadb.catconceptosresultado where idestatus = 1 order by idorden asc");
+                if($resultado){
+                    $arr = array();
+                    while($fila = $resultado->fetch_assoc()){
+                        $cat = new CatUnidades();
+                        $cat->idfila = $fila["idfila"];
+                        $cat->idorden = $fila["idorden"];
+                        $cat->concepto = $fila["concepto"];
+                        $cat->multiplicador = $fila["multiplicador"];
+                        $cat->monto = $fila["monto"];
+                        $cat->excento = $fila["excento"];
+                        $cat->gravado = $fila["gravado"];
+                        $cat->idestatus = $fila["idestatus"];
+                        $cat->pctggravado = $fila["pctggravado"];
+                        array_push($arr, $cat);
+                    }
+                    //print_r($arr);
+                    $resultado->free();
+                }
+            }catch(Exception $ex){
+                print_r($ex);
+                $arr = $ex->getMessage();
+            }
+            return $arr;
+        }
+
+
+        public function cargaCatJornadas($conn){
+            $arr = "";
+            try{
+                $resultado = $conn->query("select idjornada, jornada, maxhorastrabajo, maxhorasextras, annio, idestatus from contadb.catjornadas where idestatus = 1 order by idjornada asc");
+                if($resultado){
+                    $arr = array();
+                    while($fila = $resultado->fetch_assoc()){
+                        $cat = new CatJornadas();
+                        $cat->idjornada = $fila["idjornada"];
+                        $cat->jornada = $fila["jornada"];
+                        $cat->maxhorastrabajo = $fila["maxhorastrabajo"];
+                        $cat->maxhorasextras = $fila["maxhorasextras"];
+                        $cat->annio = $fila["annio"];
                         $cat->idestatus = $fila["idestatus"];
                         array_push($arr, $cat);
                     }
@@ -57,7 +115,7 @@
         public function cargaCatPeriodos($conn){
             $arr = "";
             try{
-                $resultado = $conn->query("select idperiodo, periodo, totaldias, diasdescanso, idestatus from contadb.catperiodos where idestatus = 1 order by idperiodo");
+                $resultado = $conn->query("select idperiodo, periodo, totaldias, diasdescanso, idestatus, maxhorasextrasdobles, maxhorasextrastriples, maxhorasextrasdoblesexcentas from contadb.catperiodos where idestatus = 1 order by idperiodo");
                 if($resultado){
                     $arr = array();
                     while($fila = $resultado->fetch_assoc()){
@@ -67,6 +125,9 @@
                         $cat->totaldias = $fila["totaldias"];
                         $cat->diasdescanso = $fila["diasdescanso"];
                         $cat->idestatus = $fila["idestatus"];
+                        $cat->maxhorasextrasdobles = $fila["maxhorasextrasdobles"];
+                        $cat->maxhorasextrastriples = $fila["maxhorasextrastriples"];
+                        $cat->maxhorasextrasdoblesexcentas = $fila["maxhorasextrasdoblesexcentas"];
                         array_push($arr, $cat);
                     }
                     //print_r($arr);
@@ -91,7 +152,7 @@
                 INNER JOIN contadb.catoperadores b ON a.idoperador = b.idoperador AND b.idestatus = 1
                 INNER JOIN contadb.catunidades c ON a.idunidad = c.idunidad AND c.idestatus = 1
                 INNER JOIN contadb.catperiodos d ON a.idperiodo = d.idperiodo AND d.idestatus = 1
-                WHERE a.idestatus = 1 
+                WHERE a.idestatus = 1
                 ORDER BY a.idparametro ASC");
                 if($resultado){
                     $arr = array();
