@@ -2,9 +2,14 @@
   include "../json/SrvCatalogos.php";
 
   $idcatalogo = 0;
+  $annio = 2023;
   $salida = "";
   if(isset($_GET["catalogo"])){
     $idcatalogo = $_GET["catalogo"];
+
+    if(isset($_GET["annio"])){
+      $annio = $_GET["annio"];
+    }
 
     $srv = new SrvCatalogos();
     switch ($idcatalogo){
@@ -21,11 +26,17 @@
         $salida = $srv->getPeriodos();
         break;
       case "5": //jornadas
-          $salida = $srv->getJornadas();
-          break;
+        $salida = $srv->getJornadas();
+        break;
       case "6": //jornadas
-          $salida = $srv->getCatalogosResultado();
-          break;
+        $salida = $srv->getCatalogosResultado();
+        break;
+      case "7": //jornadas
+        $salida = $srv->getRangosISR($annio);
+        break;
+      case "8": //jornadas
+        $salida = $srv->getRangosISRDescuento($annio);
+        break;
 
     }
 

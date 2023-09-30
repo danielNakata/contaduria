@@ -24,7 +24,8 @@ var general;
       ,montoHorasExtraTriple : 0
       ,montoHorasExtraTripleExcento : 0
       ,montoHorasExtraTripleGravado : 0
-      ,txtMontoDDL : 0;
+      ,txtMontoDDL : 0
+      ,apanio: 2023
     };
 
     let lstCatUnidades    = [];
@@ -33,6 +34,9 @@ var general;
     let lstCatOperadores  = [];
     let lstCatJornadas    = [];
     let lstCatCatalogosResultado = [];
+    let lstCatCatalogosResultadoOrigen = [];
+    let lstCatRangosISR   = [];
+    let lstCatRangosISRDescuentos   = [];
 
     $scope.cargaInicial = function(){
       $scope.lstCatUnidades    = [];
@@ -41,6 +45,10 @@ var general;
       $scope.lstCatOperadores  = [];
       $scope.lstCatJornadas    = [];
       $scope.lstCatCatalogosResultado = [];
+      $scope.lstCatCatalogosResultadoOrigen = [];
+      $scope.lstCatRangosISR   = [];
+      $scope.lstCatRangosISRDescuentos = [];
+
 
       $scope.param = {
         periodoSel: {periodo:""}
@@ -61,10 +69,13 @@ var general;
         ,montoHorasExtraTriple : 0
         ,montoHorasExtraTripleExcento : 0
         ,montoHorasExtraTripleGravado : 0
-        ,txtMontoDDL : 0;
+        ,txtMontoDDL : 0
+        ,apanio: 2023
       };
 
       $scope.cargaCatalogos();
+      $scope.cargaRangosISR();
+      $scope.cargaRangosISRDescuentos();
     };
 
     /*carga de catalogos*/
@@ -150,6 +161,7 @@ var general;
           ,url: 'services/catalogos.php?catalogo=6'
         }).then(function successCallback(response){
            $scope.lstCatCatalogosResultado = response.data.datos;
+           $scope.lstCatCatalogosResultadoOrigen = response.data.datos;
            console.log($scope.lstCatCatalogosResultado);
         }, function errorCallback(response){
           console.log("Error: ");
@@ -159,7 +171,41 @@ var general;
         console.log(ex);
       }
 
-    }
+    };
+
+    $scope.cargaRangosISR = function(){
+      try{
+          $http({
+            method: 'GET'
+            ,url: 'services/catalogos.php?catalogo=7&annio='+$scope.param.apanio
+          }).then(function successCallback(response){
+            $scope.lstCatRangosISR = response.data.datos;
+            console.log($scope.lstCatRangosISR);
+          }, function errorCallback(response){
+            console.log("Error: ");
+            console.log(response);
+          });
+        }catch(ex){
+          console.log(ex);
+        }
+    };
+
+    $scope.cargaRangosISRDescuentos = function(){
+      try{
+          $http({
+            method: 'GET'
+            ,url: 'services/catalogos.php?catalogo=8&annio='+$scope.param.apanio
+          }).then(function successCallback(response){
+            $scope.lstCatRangosISRDescuentos = response.data.datos;
+            console.log($scope.lstCatRangosISRDescuentos);
+          }, function errorCallback(response){
+            console.log("Error: ");
+            console.log(response);
+          });
+        }catch(ex){
+          console.log(ex);
+        }
+    };
 
     $scope.calculaSalarioDiario = function(){
       try{
@@ -225,6 +271,7 @@ var general;
     };
 
     $scope.calculoDiaLaborado = function(){
+      $scope.param.txtMontoDDL = 0;
       try{
         if($scope.param.txtDiaDescLab > 0){
           if(typeof $scope.param.txtMontoSalarioDia !== 'undefined'){
@@ -236,9 +283,54 @@ var general;
       }
     };
 
+    $scope.obtieneRangoISR = function(paidperiodo, pamontosaldo){
+      let rangoSel = "";
+      try{
+        console.log(paidperiodo + " " + pamontosaldo);
+        for(i = 0; i < $scope.lstCatRangosISR.length; i++){
+          let aux = $scope.lstCatRangosISR[i];
+          if(parseInt(aux.idperiodo,10) == parseInt(paidperiodo,10)){
+            //console.log(aux);
+            if(parseFloat(aux.limiteinferior) <= parseFloat(pamontosaldo) && parseFloat(aux.limitesuperior) >= parseFloat(pamontosaldo)){
+              rangoSel = aux;
+              break;
+            }
+          }
+        }
+      }catch(ex){
+        console.log(ex);
+        rangoSel = "-";
+      }
+      //console.log(rangoSel);
+      return rangoSel;
+    };
+
+    $scope.obtieneRangoISRDescuento = function(paidperiodo, pamontosaldo){
+      let rangoSel = "";
+      try{
+        console.log(paidperiodo + " " + pamontosaldo);
+        for(i = 0; i < $scope.lstCatRangosISRDescuentos.length; i++){
+          let aux = $scope.lstCatRangosISRDescuentos[i];
+          if(parseInt(aux.idperiodo,10) == parseInt(paidperiodo,10)){
+            console.log(aux);
+            if(parseFloat(aux.limitemaximo) >= parseFloat(pamontosaldo) && parseFloat(aux.limiteinferior) <= parseFloat(pamontosaldo)){
+              rangoSel = aux;
+              break;
+            }
+          }
+        }
+      }catch(ex){
+        console.log(ex);
+        rangoSel = "-";
+      }
+      //console.log(rangoSel);
+      return rangoSel;
+    };
+
     $scope.realizaCalculo = function(){
       try{
         console.log($scope.param);
+        $scope.lstCatCatalogosResultado = $scope.lstCatCatalogosResultadoOrigen;
         /*comienza a llenar la tabla*/
         try{
           $scope.lstCatCatalogosResultado[0].monto = parseFloat($scope.param.montoSalario);
@@ -253,8 +345,8 @@ var general;
           $scope.lstCatCatalogosResultado[2].excento = parseFloat($scope.param.txtMontoDDL) * parseFloat($scope.lstCatCatalogosResultado[2].multiplicador);
           $scope.lstCatCatalogosResultado[2].gravado = 0;
 
-          $scope.lstCatCatalogosResultado[3].monto = 51.82 * parseFloat($scope.lstCatCatalogosResultado[1].multiplicador);
-          $scope.lstCatCatalogosResultado[3].excento = 51.82 * parseFloat($scope.lstCatCatalogosResultado[1].multiplicador);
+          $scope.lstCatCatalogosResultado[3].monto = (parseFloat($scope.param.txtDiaDescLab)) * 51.82 * parseFloat($scope.lstCatCatalogosResultado[1].multiplicador);
+          $scope.lstCatCatalogosResultado[3].excento = (parseFloat($scope.param.txtDiaDescLab)) * 51.82 * parseFloat($scope.lstCatCatalogosResultado[1].multiplicador);
           $scope.lstCatCatalogosResultado[3].gravado = 0
 
           for(let i = 0; i < 4; i++){
@@ -263,6 +355,18 @@ var general;
             $scope.lstCatCatalogosResultado[4].gravado = parseFloat($scope.lstCatCatalogosResultado[4].gravado) + parseFloat($scope.lstCatCatalogosResultado[i].gravado);
           }
 
+          $scope.param.rangoSel = $scope.obtieneRangoISR($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[4].gravado);
+          console.log($scope.param.rangoSel);
+          $scope.param.rangoDescSel = $scope.obtieneRangoISRDescuento($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[4].gravado);
+          console.log($scope.param.rangoDescSel);
+
+          $scope.lstCatCatalogosResultado[5].gravado = parseFloat($scope.param.rangoSel.limiteinferior) * $scope.lstCatCatalogosResultado[5].multiplicador;
+          $scope.lstCatCatalogosResultado[6].gravado = parseFloat($scope.lstCatCatalogosResultado[4].gravado) + parseFloat($scope.lstCatCatalogosResultado[5].gravado);
+          $scope.lstCatCatalogosResultado[7].gravado = parseFloat($scope.param.rangoSel.pctgaplica);
+          $scope.lstCatCatalogosResultado[8].gravado = parseFloat($scope.lstCatCatalogosResultado[6].gravado) * (parseFloat($scope.param.rangoSel.pctgaplica)/100);
+          $scope.lstCatCatalogosResultado[9].gravado = parseFloat($scope.param.rangoSel.cuotafija) * $scope.lstCatCatalogosResultado[9].multiplicador; //cuota fija
+          $scope.lstCatCatalogosResultado[10].gravado = $scope.param.rangoDescSel.descuento * parseFloat($scope.lstCatCatalogosResultado[10].multiplicador); //subsidio al empleo
+          $scope.lstCatCatalogosResultado[11].gravado = $scope.lstCatCatalogosResultado[8].gravado + $scope.lstCatCatalogosResultado[9].gravado + $scope.lstCatCatalogosResultado[10].gravado; 
 
         }catch(ex){
 

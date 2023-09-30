@@ -5,6 +5,8 @@
     include "../dto/CatUnidades.php";
     include "../dto/CatJornadas.php";
     include "../dto/CatConceptosResultados.php";
+    include "../dto/RangosISR.php";
+    include "../dto/RangosISRDescuento.php";
 
     class Catalogos{
 
@@ -76,6 +78,74 @@
                         $cat->maxhorasextras = $fila["maxhorasextras"];
                         $cat->annio = $fila["annio"];
                         $cat->idestatus = $fila["idestatus"];
+                        array_push($arr, $cat);
+                    }
+                    //print_r($arr);
+                    $resultado->free();
+                }
+            }catch(Exception $ex){
+                print_r($ex);
+                $arr = $ex->getMessage();
+            }
+            return $arr;
+        }
+
+
+        public function cargaCatRangosISR($conn, $paannio){
+            $arr = "";
+            try{
+                $resultado = $conn->query("SELECT idrango, idperiodo, annio, limiteinferior, limitesuperior
+                                                , cuotafija, pctgaplica, idestatus, orden
+                                            FROM contadb.rangosisr
+                                            WHERE annio = $paannio AND idestatus = 1
+                                            ORDER BY idperiodo ASC, orden ASC ");
+                if($resultado){
+                    $arr = array();
+                    while($fila = $resultado->fetch_assoc()){
+                        $cat = new RangosISR();
+                        $cat->idrango = $fila["idrango"];
+                        $cat->idperiodo = $fila["idperiodo"];
+                        $cat->annio = $fila["annio"];
+                        $cat->limiteinferior = $fila["limiteinferior"];
+                        $cat->pctgaplica = $fila["pctgaplica"];
+                        $cat->cuotafija = $fila["cuotafija"];
+                        $cat->limitesuperior = $fila["limitesuperior"];
+                        $cat->idestatus = $fila["idestatus"];
+                        $cat->orden = $fila["limitesuperior"];
+                        $cat->orden = $fila["orden"];
+                        array_push($arr, $cat);
+                    }
+                    //print_r($arr);
+                    $resultado->free();
+                }
+            }catch(Exception $ex){
+                print_r($ex);
+                $arr = $ex->getMessage();
+            }
+            return $arr;
+        }
+
+
+        public function cargaCatRangosISRDescuento($conn, $paannio){
+            $arr = "";
+            try{
+                $resultado = $conn->query("SELECT idretencion, idperiodo, annio, limiteinferior, limitemaximo 
+                                                , descuento, idestatus, orden 
+                                            FROM contadb.rangosisrdescuento 
+                                            WHERE annio = $paannio AND idestatus = 1 
+                                            ORDER BY idperiodo ASC, orden ASC ");
+                if($resultado){
+                    $arr = array();
+                    while($fila = $resultado->fetch_assoc()){
+                        $cat = new RangosISRDescuento();
+                        $cat->idretencion = $fila["idretencion"];
+                        $cat->idperiodo = $fila["idperiodo"];
+                        $cat->annio = $fila["annio"];
+                        $cat->limiteinferior = $fila["limiteinferior"];
+                        $cat->limitemaximo = $fila["limitemaximo"];
+                        $cat->descuento = $fila["descuento"];
+                        $cat->idestatus = $fila["idestatus"];
+                        $cat->orden = $fila["orden"];
                         array_push($arr, $cat);
                     }
                     //print_r($arr);
