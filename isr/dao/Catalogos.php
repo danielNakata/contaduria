@@ -7,6 +7,7 @@
     include "../dto/CatConceptosResultados.php";
     include "../dto/RangosISR.php";
     include "../dto/RangosISRDescuento.php";
+    include "../dto/CatVacaciones.php";
 
     class Catalogos{
 
@@ -21,6 +22,36 @@
                         $cat = new CatUnidades();
                         $cat->idunidad = $fila["idunidad"];
                         $cat->unidad = $fila["unidad"];
+                        $cat->idestatus = $fila["idestatus"];
+                        array_push($arr, $cat);
+                    }
+                    //print_r($arr);
+                    $resultado->free();
+                }
+            }catch(Exception $ex){
+                print_r($ex);
+                $arr = $ex->getMessage();
+            }
+            return $arr;
+        }
+
+        public function cargaCatVacaciones($conn, $paannio){
+            $arr = "";
+            try{
+                $resultado = $conn->query("SELECT idvacaciones, annioinicial, anniofinal, diasvacaciones, orden, annio, idestatus
+                FROM contadb.catvacaciones
+                WHERE annio = $paannio AND idestatus = 1 
+                ORDER BY orden ASC");
+                if($resultado){
+                    $arr = array();
+                    while($fila = $resultado->fetch_assoc()){
+                        $cat = new CatVacaciones();
+                        $cat->idvacaciones = $fila["idvacaciones"];
+                        $cat->annioinicial = $fila["annioinicial"];
+                        $cat->anniofinal = $fila["anniofinal"];
+                        $cat->diasvacaciones = $fila["diasvacaciones"];
+                        $cat->orden = $fila["orden"];
+                        $cat->annio = $fila["annio"];
                         $cat->idestatus = $fila["idestatus"];
                         array_push($arr, $cat);
                     }

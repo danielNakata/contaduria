@@ -39,6 +39,72 @@
                       </td>
                     </tr>
                     <tr>
+                      <th>Prevision Social</th>
+                      <td>
+                        <input id="txtMontoPrevisionSocial" name="txtMontoPrevisionSocial" ng-model="param.txtMontoPrevisionSocial" type="text" ng-change="calculaPrevisionSocialGravado()" />
+                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
+                        Prevision Social Dia: <strong><span id="txtMontoPrevisionSocialDia" name="txtMontoPrevisionSocialDia">${{param.txtMontoPrevisionSocialDia|number:2}}</span></strong>
+                        Prevision Social Gravado: <strong><span id="txtMontoPrevisionSocialGravado" name="txtMontoPrevisionSocialGravado">${{param.txtMontoPrevisionSocialGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Dias Trabajados en el Año</th>
+                      <td>
+                        <input id="txtDiasTrabajadosAnnio" name="txtDiasTrabajadosAnnio" ng-model="param.txtDiasTrabajadosAnnio" type="text" ng-change="calculaAguinaldoGravado()" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Aguinaldo</th>
+                      <td>
+                        <input id="txtMontoAguinaldo" name="txtMontoAguinaldo" ng-model="param.txtMontoAguinaldo" type="text" ng-change="calculaAguinaldoGravado()" />
+                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
+                        Aguinaldo Diario: <strong><span id="txtMontoAguinaldoDia" name="txtMontoAguinaldoDia">${{param.txtMontoAguinaldoDia|number:2}}</span></strong>
+                        Aguinaldo Gravado: <strong><span id="txtMontoAguinaldoGravado" name="txtMontoAguinaldoGravado">${{param.txtMontoAguinaldoGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Años Trabajados</th>
+                      <td>
+                        <input id="txtAniosTrabajados" name="txtAniosTrabajados" ng-model="param.txtAniosTrabajados" type="text" ng-change="calculaPrimaVacacional()" />
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Prima Vacacional</th>
+                      <td>
+                        <input id="txtMontoPrimaVacacional" name="txtMontoPrimaVacacional" ng-model="param.txtMontoPrimaVacacional" type="text" />
+                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
+                        Prima Vacacional Diario: <strong><span id="txtMontoPrimaVacacionalDia" name="txtMontoPrimaVacacionalDia">${{param.txtMontoPrimaVacacionalDia|number:2}}</span></strong>
+                        Prima Vacacional Gravado: <strong><span id="txtMontoPrimaVacacionalGravado" name="txtMontoPrimaVacacionalGravado">${{param.txtMontoPrimaVacacionalGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Bonos</th>
+                      <td>
+                        <input id="txtMontoBonos" name="txtMontoBonos" ng-model="param.txtMontoBonos" type="text" ng-change="calculaBonos()" />
+                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
+                        Bonos Diario: <strong><span id="txtMontoBonosDia" name="txtMontoBonosDia">${{param.txtMontoBonosDia|number:2}}</span></strong>
+                        Bonos Excento: <strong><span id="txtMontoBonosExcento" name="txtMontoBonosExcento">${{param.txtMontoBonosExcento|number:2}}</span></strong>
+                        Bonos Gravado: <strong><span id="txtMontoBonosGravado" name="txtMontoBonosGravado">${{param.txtMontoBonosGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>PTU</th>
+                      <td>
+                        <input id="txtMontoPTU" name="txtMontoPTU" ng-model="param.txtMontoPTU" type="text" ng-change="calculaPTU()" />
+                        Bonos Excento: <strong><span id="txtMontoPTUExcento" name="txtMontoPTUExcento">${{param.txtMontoPTUExcento|number:2}}</span></strong>
+                        Bonos Gravado: <strong><span id="txtMontoPTUGravado" name="txtMontoPTUGravado">${{param.txtMontoPTUGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Indemnización</th>
+                      <td>
+                        <input id="txtMontoIndemnizacion" name="txtMontoIndemnizacion" ng-model="param.txtMontoIndemnizacion" type="text" ng-change="calculoIndemnizacion()" />
+                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
+                        Indemnizacion Excenta: <strong><span id="txtMontoIndemnizacionExcenta" name="txtMontoIndemnizacionExcenta">${{param.txtMontoIndemnizacionExcenta|number:2}}</span></strong>
+                        Indemnizacion Gravada: <strong><span id="txtMontoIndemnizacionGravado" name="txtMontoIndemnizacionGravado">${{param.txtMontoIndemnizacionGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
                         <th>Tipo de Jornada</th>
                         <td>
                             <select id="cmbTipoJornada" name="cmbTipoJornada" ng-model="param.jornadaSel">
@@ -89,41 +155,29 @@
                       <td>
                         <input id="txtDiaDescLab" name="txtDiaDescLab" type="text" ng-model="param.txtDiaDescLab" ng-change="calculoDiaLaborado()" />
                         <input id="txtDiaDescPeriodo" name="txtDiaDescPeriodo" type="text" ng-model="param.txtDiaDescPeriodo" ng-value="param.periodoSel.diasdescanso" />
-                        <input type="text" id="txtMontoDDL" name="txtMontoDDL" ng-model="param.txtMontoDDL" />
+                        <!-- <input type="text" id="txtMontoDDL" name="txtMontoDDL" ng-model="param.txtMontoDDL" />-->
+                        Monto Dia de Descanso Laborado: <strong><span id="txtMontoDDL" name="txtMontoDDL">{{param.txtMontoDDL|number:2}}</span></strong>
                       </td>
                     </tr>
                     <tr>
-                      <th colspan="1">Sueldos a Calcular</th>
-                      <td><button class="btn btn-primary btn-sm" type="button" ng-click="realizaCalculo()">Calcular</button></td>
+                      <td colspan="2" style="width: 100%; text-align:right;">
+                        <button class="btn btn-primary btn-sm" style="width: 15%;" type="button" ng-click="realizaCalculo()">Calcular ISR</button>
+                        <button class="btn btn-warning btn-sm" style="width: 15%;" type="button" ng-click="cargaInicial()">Reiniciar</button>
+                      </td>
                     </tr>
                 </table>
             </form>
 
-        <table  class="table table-sm table-bordered">
-            <tr><th colspan="4">Resultados</th></tr>
-            <tr><th>Concepto</th>                            <th>Monto</th>                    <th>Excento</th>            <th>Gravado</th></tr>
-            <tr ng-repeat="item in lstCatCatalogosResultado">
-              <td style="text-align: left">{{item.concepto.replace("comodin", param.periodoSel.periodo)}}</td>
-              <td style="text-align: right">{{item.monto|number:2}}</td>
-              <td style="text-align: right">{{item.excento|number:2}}</td>
-              <td style="text-align: right">{{item.gravado|number:2}}</td>
-            </tr>
-
-            <!--
-            <tr><td>Salario {{param.periodoSel.periodo}}</td><td></td>                         <td></td>                   <td></td></tr>
-            <tr><td>Tiempo Extra {{param.periodoSel.periodo}}</td><td></td>                    <td></td>                   <td></td></tr>
-            <tr><td>Dia de Descanso Laborado</td>            <td></td>                         <td></td>                   <td></td></tr>
-            <tr><td>Prima Dominical</td>                     <td></td>                         <td></td>                   <td></td></tr>
-            <tr><th>Totales {{param.periodoSel.periodo}}</th><th></th>                         <th></th>                   <th></th></tr>
-            <tr><td colspan="3">Limite Inferior ISR</td>                                                                   <td></td></tr>
-            <tr><td colspan="3">Excedente Limite Inferior ISR</td>                                                         <td></td></tr>
-            <tr><td colspan="3">Porcentaje Aplicable Lim Inf ISR</td>                                                      <td></td></tr>
-            <tr><td colspan="3">ISR Marginal</td>                                                                          <td></td></tr>
-            <tr><td colspan="3">Cuota Fija</td>                                                                            <td></td></tr>
-            <tr><td colspan="3">Subsidio al Empleo Correspondiente</td>                                                    <td></td></tr>
-            <tr><th colspan="3">ISR a Retener {{param.periodoSel.periodo}}</th>                                            <th></th></tr>
-            -->
-        </table>
+          <table  class="table table-sm table-bordered">
+              <tr><th colspan="4">Resultados</th></tr>
+              <tr><th>Concepto</th>                            <th>Monto</th>                    <th>Excento</th>            <th>Gravado</th></tr>
+              <tr ng-repeat="item in lstCatCatalogosResultado">
+                <td style="text-align: left">({{item.idorden}}) - {{item.concepto.replace("comodin", param.periodoSel.periodo)}}</td>
+                <td style="text-align: right">{{item.monto|number:2}}</td>
+                <td style="text-align: right">{{item.excento|number:2}}</td>
+                <td style="text-align: right">{{item.gravado|number:2}}</td>
+              </tr>
+          </table>
         </div>
     </body>
 </html>

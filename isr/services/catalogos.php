@@ -37,6 +37,9 @@
       case "8": //jornadas
         $salida = $srv->getRangosISRDescuento($annio);
         break;
+      case "9": //vacaciones
+        $salida = $srv->getVacaciones($annio);
+        break;
 
     }
 
