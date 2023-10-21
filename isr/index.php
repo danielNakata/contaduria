@@ -56,7 +56,7 @@
                     <tr>
                       <th>Aguinaldo</th>
                       <td>
-                        <input id="txtMontoAguinaldo" name="txtMontoAguinaldo" ng-model="param.txtMontoAguinaldo" type="text" ng-change="calculaAguinaldoGravado()" />
+                        <input id="txtMontoAguinaldo" name="txtMontoAguinaldo" ng-model="param.txtMontoAguinaldo" type="text" ng-blur="calculaAguinaldoGravado1()" />
                         <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
                         Aguinaldo Diario: <strong><span id="txtMontoAguinaldoDia" name="txtMontoAguinaldoDia">${{param.txtMontoAguinaldoDia|number:2}}</span></strong>
                         Aguinaldo Gravado: <strong><span id="txtMontoAguinaldoGravado" name="txtMontoAguinaldoGravado">${{param.txtMontoAguinaldoGravado|number:2}}</span></strong>
@@ -71,7 +71,7 @@
                     <tr>
                       <th>Prima Vacacional</th>
                       <td>
-                        <input id="txtMontoPrimaVacacional" name="txtMontoPrimaVacacional" ng-model="param.txtMontoPrimaVacacional" type="text" />
+                        <input id="txtMontoPrimaVacacional" name="txtMontoPrimaVacacional" ng-model="param.txtMontoPrimaVacacional" type="text" ng-blur="calculaPrimaVacacional1()" />
                         <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
                         Prima Vacacional Diario: <strong><span id="txtMontoPrimaVacacionalDia" name="txtMontoPrimaVacacionalDia">${{param.txtMontoPrimaVacacionalDia|number:2}}</span></strong>
                         Prima Vacacional Gravado: <strong><span id="txtMontoPrimaVacacionalGravado" name="txtMontoPrimaVacacionalGravado">${{param.txtMontoPrimaVacacionalGravado|number:2}}</span></strong>
@@ -96,10 +96,25 @@
                       </td>
                     </tr>
                     <tr>
+                      <th>Ancipos / Rendimientos</th>
+                      <td>
+                        <input id="txtMontoAnticipo" name="txtMontoAnticipo" ng-model="param.txtMontoAnticipo" type="text" ng-change="calculaAnticipo()" />
+                        Anticipos Excento: <strong><span id="txtMontoAnticipoExcento" name="txtMontoAnticipoExcento">${{param.txtMontoAnticipoExcento|number:2}}</span></strong>
+                        Anticipos Gravado: <strong><span id="txtMontoAnticipoGravado" name="txtMontoAnticipoGravado">${{param.txtMontoAnticipoGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Honorarios</th>
+                      <td>
+                        <input id="txtMontoHonorario" name="txtMontoHonorario" ng-model="param.txtMontoHonorario" type="text" ng-change="calculaHonorario()" />
+                        Honorarios Excento: <strong><span id="txtMontoHonorarioExcento" name="txtMontoHonorarioExcento">${{param.txtMontoHonorarioExcento|number:2}}</span></strong>
+                        Honorarios Gravado: <strong><span id="txtMontoHonorarioGravado" name="txtMontoHonorarioGravado">${{param.txtMontoHonorarioGravado|number:2}}</span></strong>
+                      </td>
+                    </tr>
+                    <tr>
                       <th>Indemnización</th>
                       <td>
                         <input id="txtMontoIndemnizacion" name="txtMontoIndemnizacion" ng-model="param.txtMontoIndemnizacion" type="text" ng-change="calculoIndemnizacion()" />
-                        <!--<input id="txtMontoSalarioDia" name="txtMontoSalarioDia" ng-model="param.txtMontoSalarioDia" type="text" /> -->
                         Indemnizacion Excenta: <strong><span id="txtMontoIndemnizacionExcenta" name="txtMontoIndemnizacionExcenta">${{param.txtMontoIndemnizacionExcenta|number:2}}</span></strong>
                         Indemnizacion Gravada: <strong><span id="txtMontoIndemnizacionGravado" name="txtMontoIndemnizacionGravado">${{param.txtMontoIndemnizacionGravado|number:2}}</span></strong>
                       </td>

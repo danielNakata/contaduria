@@ -50,6 +50,12 @@ var general;
       ,txtMontoPTU: 0
       ,txtMontoPTUExcento: 0
       ,txtMontoPTUGravado: 0
+      ,txtMontoHonorario: 0
+      ,txtMontoHonorarioExcento: 0
+      ,txtMontoHonorarioGravado: 0
+      ,txtMontoAnticipo: 0
+      ,txtMontoAnticipoExcento: 0
+      ,txtMontoAnticipoGravado: 0
     };
 
     let lstCatUnidades    = [];
@@ -121,6 +127,12 @@ var general;
         ,txtMontoPTU: 0
         ,txtMontoPTUExcento: 0
         ,txtMontoPTUGravado: 0
+        ,txtMontoHonorario: 0
+        ,txtMontoHonorarioExcento: 0
+        ,txtMontoHonorarioGravado: 0
+        ,txtMontoAnticipo: 0
+        ,txtMontoAnticipoExcento: 0
+        ,txtMontoAnticipoGravado: 0
       };
 
       $scope.cargaCatalogos();
@@ -439,6 +451,51 @@ var general;
       }
     };
 
+    $scope.calculaAnticipo = function(){
+      $scope.param.txtMontoAnticipoExcento = 0;
+      $scope.param.txtMontoAnticipoGravado = 0;
+      try{
+        if(typeof $scope.param.txtMontoAnticipo !== 'undefined'){
+          $scope.param.txtMontoAnticipoExcento = 0;
+          $scope.param.txtMontoAnticipoGravado = $scope.param.txtMontoAnticipo;
+        }
+      }catch(ex){
+        console.log(ex);
+      }
+    }
+
+    $scope.calculaHonorario = function(){
+      $scope.param.txtMontoHonorarioExcento = 0;
+      $scope.param.txtMontoHonorarioGravado = 0;
+      try{
+        if(typeof $scope.param.txtMontoHonorario !== 'undefined'){
+          $scope.param.txtMontoHonorarioExcento = 0;
+          $scope.param.txtMontoHonorarioGravado = $scope.param.txtMontoHonorario;
+        }
+      }catch(ex){
+        console.log(ex);
+      }
+    }
+
+    $scope.calculaAguinaldoGravado1 = function(){
+      $scope.param.txtMontoAguinaldoGravado = 0;
+      $scope.param.txtMontoAguinaldoDia = 0;
+      let limAginaldo = parseFloat($scope.lstCatParametros[13].valor);
+      try{
+        if(typeof $scope.param.txtMontoAguinaldo !== 'undefined'){
+          if(parseFloat($scope.param.txtMontoAguinaldo)> 0){
+            if(parseFloat($scope.param.txtMontoAguinaldo) > limAginaldo){
+              $scope.param.txtMontoAguinaldoGravado = parseFloat($scope.param.txtMontoAguinaldo)-limAginaldo;
+            }else{
+              $scope.param.txtMontoAguinaldoGravado = 0;
+            }
+          }
+        }
+      }catch(ex){
+        console.log(ex);
+      }
+    }
+
     $scope.calculaAguinaldoGravado = function(){
       $scope.param.txtMontoAguinaldoGravado = 0;
       $scope.param.txtMontoAguinaldoDia = 0;
@@ -447,9 +504,10 @@ var general;
       try{
         $scope.param.txtMontoAguinaldoDia = $scope.param.txtMontoSalarioDia;
         limAginaldo = limAginaldo * parseInt($scope.param.periodoSel.totaldias);
+        $scope.param.txtMontoAguinaldo = diasAguinaldo * $scope.param.txtMontoAguinaldoDia;
         console.log($scope.param.txtMontoAguinaldo);
         if(typeof $scope.param.txtMontoAguinaldo !== 'undefined'){
-          if(parseFloat($scope.param.txtMontoAguinaldo > 0)){
+          if(parseFloat($scope.param.txtMontoAguinaldo)>0){
             if(parseFloat($scope.param.txtMontoAguinaldo) > limAginaldo){
               $scope.param.txtMontoAguinaldoGravado = parseFloat($scope.param.txtMontoAguinaldo)-limAginaldo;
             }
@@ -498,6 +556,24 @@ var general;
         console.log(ex);
       }
     };
+
+    $scope.calculaPrimaVacacional1 = function(){
+      let limPrima = parseFloat($scope.lstCatParametros[8].valor);
+      let pctgPrima = parseFloat($scope.lstCatParametros[9].valor);
+      try{
+        if(typeof $scope.param.txtMontoPrimaVacacional !== 'undefined'){
+          if(parseFloat($scope.param.txtMontoPrimaVacacional)>0){
+            if(parseFloat($scope.param.txtMontoPrimaVacacional)>limPrima){
+              $scope.param.txtMontoPrimaVacacionalGravado = parseFloat($scope.param.txtMontoPrimaVacacional)-limPrima;
+            }else{
+              $scope.param.txtMontoPrimaVacacionalGravado = 0;
+            }
+          }
+        }
+      }catch(ex){
+        console.log(ex);
+      }
+    }
 
     $scope.calculaPrimaVacacional = function(){
       $scope.param.vacacionesSel = {};
@@ -626,7 +702,7 @@ var general;
 
           $scope.lstCatCatalogosResultado[7].monto = parseFloat($scope.param.txtMontoIndemnizacion);
           $scope.lstCatCatalogosResultado[7].excento = parseFloat($scope.param.txtMontoIndemnizacionExcenta);
-          $scope.lstCatCatalogosResultado[7].gravado = parseFloat($scope.param.txtMontoAguinaldoGravado);
+          $scope.lstCatCatalogosResultado[7].gravado = parseFloat($scope.param.txtMontoIndemnizacionGravado);
 
           $scope.lstCatCatalogosResultado[8].monto = parseFloat($scope.param.txtMontoBonos);
           $scope.lstCatCatalogosResultado[8].excento = parseFloat($scope.param.txtMontoBonosExcento);
@@ -636,24 +712,32 @@ var general;
           $scope.lstCatCatalogosResultado[9].excento = parseFloat($scope.param.txtMontoPTUExcento);
           $scope.lstCatCatalogosResultado[9].gravado = parseFloat($scope.param.txtMontoPTUGravado);
 
-          for(let i = 0; i < 10; i++){
-            $scope.lstCatCatalogosResultado[10].monto = parseFloat($scope.lstCatCatalogosResultado[10].monto) + parseFloat($scope.lstCatCatalogosResultado[i].monto);
-            $scope.lstCatCatalogosResultado[10].excento = parseFloat($scope.lstCatCatalogosResultado[10].excento) + parseFloat($scope.lstCatCatalogosResultado[i].excento);
-            $scope.lstCatCatalogosResultado[10].gravado = parseFloat($scope.lstCatCatalogosResultado[10].gravado) + parseFloat($scope.lstCatCatalogosResultado[i].gravado);
+          $scope.lstCatCatalogosResultado[10].monto = parseFloat($scope.param.txtMontoAnticipo);
+          $scope.lstCatCatalogosResultado[10].excento = parseFloat($scope.param.txtMontoAnticipoExcento);
+          $scope.lstCatCatalogosResultado[10].gravado = parseFloat($scope.param.txtMontoAnticipoGravado);
+
+          $scope.lstCatCatalogosResultado[11].monto = parseFloat($scope.param.txtMontoHonorario);
+          $scope.lstCatCatalogosResultado[11].excento = parseFloat($scope.param.txtMontoHonorarioExcento);
+          $scope.lstCatCatalogosResultado[11].gravado = parseFloat($scope.param.txtMontoHonorarioGravado);
+
+          for(let i = 0; i < 12; i++){
+            $scope.lstCatCatalogosResultado[12].monto = parseFloat($scope.lstCatCatalogosResultado[12].monto) + parseFloat($scope.lstCatCatalogosResultado[i].monto);
+            $scope.lstCatCatalogosResultado[12].excento = parseFloat($scope.lstCatCatalogosResultado[12].excento) + parseFloat($scope.lstCatCatalogosResultado[i].excento);
+            $scope.lstCatCatalogosResultado[12].gravado = parseFloat($scope.lstCatCatalogosResultado[12].gravado) + parseFloat($scope.lstCatCatalogosResultado[i].gravado);
           }
 
-          $scope.param.rangoSel = $scope.obtieneRangoISR($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[10].gravado);
+          $scope.param.rangoSel = $scope.obtieneRangoISR($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[12].gravado);
           //console.log($scope.param.rangoSel);
-          $scope.param.rangoDescSel = $scope.obtieneRangoISRDescuento($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[10].gravado);
+          $scope.param.rangoDescSel = $scope.obtieneRangoISRDescuento($scope.param.periodoSel.idperiodo, $scope.lstCatCatalogosResultado[12].gravado);
           console.log($scope.param.rangoDescSel);
 
-          $scope.lstCatCatalogosResultado[11].gravado = parseFloat($scope.param.rangoSel.limiteinferior) * $scope.lstCatCatalogosResultado[11].multiplicador;
-          $scope.lstCatCatalogosResultado[12].gravado = parseFloat($scope.lstCatCatalogosResultado[10].gravado) + parseFloat($scope.lstCatCatalogosResultado[11].gravado);
-          $scope.lstCatCatalogosResultado[13].gravado = parseFloat($scope.param.rangoSel.pctgaplica);
-          $scope.lstCatCatalogosResultado[14].gravado = parseFloat($scope.lstCatCatalogosResultado[12].gravado) * (parseFloat($scope.param.rangoSel.pctgaplica)/100);
-          $scope.lstCatCatalogosResultado[15].gravado = parseFloat($scope.param.rangoSel.cuotafija) * $scope.lstCatCatalogosResultado[13].multiplicador; //cuota fija
-          $scope.lstCatCatalogosResultado[16].gravado = $scope.param.rangoDescSel.descuento * parseFloat($scope.lstCatCatalogosResultado[14].multiplicador); //subsidio al empleo
-          $scope.lstCatCatalogosResultado[17].gravado = $scope.lstCatCatalogosResultado[14].gravado + $scope.lstCatCatalogosResultado[15].gravado + $scope.lstCatCatalogosResultado[16].gravado; 
+          $scope.lstCatCatalogosResultado[13].gravado = parseFloat($scope.param.rangoSel.limiteinferior) * $scope.lstCatCatalogosResultado[13].multiplicador;
+          $scope.lstCatCatalogosResultado[14].gravado = parseFloat($scope.lstCatCatalogosResultado[12].gravado) + parseFloat($scope.lstCatCatalogosResultado[13].gravado);
+          $scope.lstCatCatalogosResultado[15].gravado = parseFloat($scope.param.rangoSel.pctgaplica);
+          $scope.lstCatCatalogosResultado[16].gravado = parseFloat($scope.lstCatCatalogosResultado[14].gravado) * (parseFloat($scope.param.rangoSel.pctgaplica)/100);
+          $scope.lstCatCatalogosResultado[17].gravado = parseFloat($scope.param.rangoSel.cuotafija) * $scope.lstCatCatalogosResultado[15].multiplicador; //cuota fija
+          $scope.lstCatCatalogosResultado[18].gravado = $scope.param.rangoDescSel.descuento * parseFloat($scope.lstCatCatalogosResultado[18].multiplicador); //subsidio al empleo
+          $scope.lstCatCatalogosResultado[19].gravado = $scope.lstCatCatalogosResultado[16].gravado + $scope.lstCatCatalogosResultado[17].gravado + $scope.lstCatCatalogosResultado[18].gravado; 
 
         }catch(ex){
           console.log(ex);
